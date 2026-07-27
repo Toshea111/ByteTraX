@@ -14,12 +14,16 @@ conda create -n bytetrax python=3.12 -y
 
 ## Installation
 
+Activate the environment and install the required packages.
+
 ```bash
 conda activate bytetrax
 pip install -e Deploy/ultralytics
 ```
 
 ## Usage
+
+Deploy via Python.
 
 ```python
 from ultralytics import YOLO
@@ -29,6 +33,8 @@ results = model.track(source="path/to/video.mp4", tracker="bytetrax.yaml")
 ```
 
 ## CLI
+
+Deploy via the YOLO CLI.
 
 ```bash
 yolo track model=yolo26n.pt source="path/to/video.mp4" tracker="bytetrax.yaml"
