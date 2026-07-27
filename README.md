@@ -45,6 +45,5 @@ yolo track model=yolo26n.pt source="path/to/video.mp4" tracker="bytetrax.yaml"
 Run the tutorial script for a full working example.
 
 ```bash
-conda activate bytetrax
 python Tutorials/YOLO.py
 ```
