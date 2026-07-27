@@ -1,6 +1,6 @@
 # ByteTraX
 
-**ByteTraX** is a multi-object tracking algorithm developed as an enhancement of the [ByteTrack](https://github.com/FoundationVision/ByteTrack) architecture. It leverages optimised thresholding paired with track reconnection and merging functions to reduce identity switches and improve tracking continuity. This yields superior speed and accuracy across a range of tracking tasks. It is paired with [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) for detection.
+**ByteTraX** is a multi-object tracking algorithm developed as an enhancement of the [ByteTrack](https://github.com/FoundationVision/ByteTrack) architecture. It leverages optimised thresholding paired with track reconnection and merging functions to reduce identity switches and improve tracking continuity. This yields superior speed and accuracy across a range of tracking tasks and benchmarks. It is paired with [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) for detection.
 
 ## Setup
 
