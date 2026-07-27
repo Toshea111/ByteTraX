@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bytetrax"
+version = "8.4.104"
+description = "ByteTraX: Ultralytics YOLO with the ByteTraX multi-object tracker"
+license = {text = "AGPL-3.0"}
+requires-python = ">=3.8"
+authors = [
+    {name = "ByteTraX Authors"},
+]
+keywords = ["bytetrax", "ultralytics", "yolo", "object-tracking", "multi-object-tracking"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+dependencies = [
+    "numpy>=1.22.0",
+    "opencv-python>=4.6.0",
+    "pillow>=7.1.2",
+    "pyyaml>=5.3.1",
+    "requests>=2.23.0",
+    "scipy>=1.4.1",
+    "torch>=1.8.0",
+    "torchvision>=0.9.0",
+    "tqdm>=4.64.0",
+    "psutil",
+    "py-cpuinfo",
+    "pandas>=1.1.4",
+    "seaborn>=0.11.0",
+    "ultralytics-thop>=2.0.0",
+    "lapx>=0.5.9",
+    "matplotlib>=3.3.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "black", "isort", "flake8"]
+
+[project.scripts]
+yolo = "ultralytics.cfg.__init__:entrypoint"
+bytetrax = "ultralytics.cfg.__init__:entrypoint"
+
+[project.urls]
+Homepage = "https://github.com/ultralytics/ultralytics"
+Documentation = "https://docs.ultralytics.com"
+Repository = "https://github.com/ultralytics/ultralytics"
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["ultralytics*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+ultralytics = [
+    "**/*.yaml",
+    "**/*.yml",
+    "**/*.json",
+    "**/*.csv",
+    "assets/*",
+    "py.typed",
+]
+
+[tool.isort]
+line_length = 120
+multi_line_output = 3
+balanced_wrapping = true
+known_myself = ["ultralytics"]
+
+[tool.flake8]
+max-line-length = 120
+exclude = "__init__.py"
