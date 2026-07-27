@@ -1,0 +1,21 @@
+# Dependencies for ByteTraX (Ultralytics YOLO integration)
+# For an editable install of the package itself, prefer:
+#   py -m pip install -e Deploy/ultralytics
+
+# --- Deploy/ultralytics ---
+numpy>=1.22.0
+opencv-python>=4.6.0
+pillow>=7.1.2
+pyyaml>=5.3.1
+requests>=2.23.0
+scipy>=1.4.1
+torch>=1.8.0
+torchvision>=0.9.0
+tqdm>=4.64.0
+psutil
+py-cpuinfo
+pandas>=1.1.4
+seaborn>=0.11.0
+ultralytics-thop>=2.0.0
+lapx>=0.5.9
+matplotlib>=3.3.0
