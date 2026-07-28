@@ -34,7 +34,7 @@ results = model.track(source="path/to/video.mp4", tracker="bytetrax.yaml")
 
 ## CLI
 
-Deploy via the YOLO CLI.
+Deploy via the Ultralytics CLI.
 
 ```bash
 yolo track model=yolo26n.pt source="path/to/video.mp4" tracker="bytetrax.yaml"
