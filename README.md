@@ -2,6 +2,8 @@
 
 **ByteTraX** is a multi-object tracking algorithm developed as an enhancement of the [ByteTrack](https://github.com/FoundationVision/ByteTrack) architecture. It leverages optimised thresholding paired with track reconnection and merging functions to reduce identity switches and improve tracking continuity. This yields superior speed and accuracy across a range of tracking tasks and benchmarks. It is paired with [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) for detection.
 
+<div align="center"><img src="Images/GMOT-40%20Example.gif" width="32%" alt="GMOT-40 Example"> <img src="Images/Shark%20Breach%20Example.gif" width="32%" alt="Shark Breach Example"> <img src="Images/TeamTrack%20Example.gif" width="32%" alt="TeamTrack Example"></div>
+
 ## Setup
 
 Clone the repository and create a conda environment.
