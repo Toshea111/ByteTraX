@@ -19,10 +19,22 @@ from ultralytics import YOLO
 
 def find_video(base_dir, folder):
     """Find video file (.mov or .mp4) inside a dataset folder."""
+    folder_path = os.path.join(base_dir, folder)
+    if not os.path.exists(folder_path):
+        return None
+
+    # Look for any .mp4 or .mov file in the folder
     for ext in [".mov", ".mp4"]:
-        video_path = os.path.join(base_dir, folder, f"{folder}{ext}")
+        # First try the folder name pattern
+        video_path = os.path.join(folder_path, f"{folder}{ext}")
         if os.path.exists(video_path):
             return video_path
+
+    # If not found, look for any video file in the folder
+    for file in os.listdir(folder_path):
+        if file.endswith((".mov", ".mp4")):
+            return os.path.join(folder_path, file)
+
     return None
 
 
@@ -113,8 +125,8 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "tracking_results"),
-        help="Output directory for MOT-format tracking results (default: script_dir/tracking_results).",
+        default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "Results"),
+        help="Output directory for MOT-format tracking results (default: script_dir/Results).",
     )
     parser.add_argument(
         "--name",
@@ -134,13 +146,15 @@ def main():
         parser.error("Provide either --video or --base_dir, not both.")
 
     tracker_name = Path(args.tracker).stem
+    model_name = Path(args.model).stem
 
     print(f"Loading YOLO model: {args.model}")
     model = YOLO(args.model)
 
     if args.video:
         # Single video mode
-        output_filename = args.name or f"Tracker_{tracker_name}_conf{args.conf:.2f}.txt"
+        video_name = Path(args.video).stem
+        output_filename = args.name or f"Tracker_{model_name}_{tracker_name}_{video_name}_conf{args.conf:.2f}.txt"
         output_path = os.path.join(args.output, output_filename)
         print(f"\nProcessing single video with tracker: {tracker_name}, conf={args.conf}")
         process_video(model, args.video, args.tracker, args.conf, output_path)
@@ -153,10 +167,12 @@ def main():
                 print(f"Warning: Video not found for folder {folder}")
                 continue
 
-            output_filename = args.name or f"Tracker_{tracker_name}_{folder}_conf{args.conf:.2f}.txt"
+            # Use actual video filename as sequence
+            video_name = Path(video_path).stem
+            output_filename = args.name or f"Tracker_{model_name}_{tracker_name}_{video_name}_conf{args.conf:.2f}.txt"
             output_path = os.path.join(args.output, output_filename)
 
-            print(f"\nProcessing {folder}...")
+            print(f"\nProcessing {video_name}...")
             process_video(model, video_path, args.tracker, args.conf, output_path)
 
     print("\nAll videos processed successfully!")

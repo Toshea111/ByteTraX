@@ -28,6 +28,51 @@ def detect_seq_length(file_path):
     return max_frame if max_frame > 0 else None
 
 
+def parse_tracker_filename(filename):
+    """Parse Track.py filename structure to extract model name, tracker name, sequence, and confidence threshold.
+
+    Expected patterns:
+    - Tracker_{model_name}_{tracker_name}_{sequence}_conf{conf:.2f}.txt
+    - Tracker_{model_name}_{tracker_name}_conf{conf:.2f}.txt (no sequence)
+
+    Returns:
+        tuple: (model_name, tracker_name, sequence, conf_threshold) or (None, None, None, None) if pattern doesn't match
+    """
+    if not filename:
+        return None, None, None, None
+
+    stem = Path(filename).stem
+
+    # Check if it matches the Track.py pattern
+    if not stem.startswith('Tracker_'):
+        return None, None, None, None
+
+    parts = stem.split('_')
+    if len(parts) < 4:
+        return None, None, None, None
+
+    # Extract model name (second part after 'Tracker_')
+    model_name = parts[1]
+
+    # Extract tracker name (third part after 'Tracker_')
+    tracker_name = parts[2]
+
+    # Check for confidence threshold (last part should be 'conf{value}')
+    conf_threshold = None
+    if parts[-1].startswith('conf'):
+        try:
+            conf_threshold = float(parts[-1][4:])
+        except ValueError:
+            pass
+
+    # Check for sequence name (if there are 5+ parts, the fourth part is the sequence)
+    sequence = None
+    if len(parts) >= 5 and parts[-1].startswith('conf'):
+        sequence = parts[3]
+
+    return model_name, tracker_name, sequence, conf_threshold
+
+
 def get_metric_summary_values(metric, results):
     """Extract all computed values from a metric's sequence results.
 
@@ -46,27 +91,31 @@ def get_metric_summary_values(metric, results):
     for field in all_defined_fields:
         if field not in results:
             continue
+        # Remove metric-specific prefixes from field names
+        clean_field = field.replace('CLR_', '').replace('VACE_', '')
         if field in metric.float_array_fields:
-            vals[field] = float(100 * np.mean(results[field]))
+            vals[clean_field] = float(100 * np.mean(results[field]))
         elif field in metric.integer_array_fields:
-            vals[field] = float(np.mean(results[field]))
+            vals[clean_field] = float(np.mean(results[field]))
         elif field in metric.float_fields:
-            vals[field] = float(100 * float(results[field]))
+            vals[clean_field] = float(100 * float(results[field]))
         elif field in metric.integer_fields:
-            vals[field] = int(results[field])
+            vals[clean_field] = int(results[field])
 
     # Include any extra keys returned by eval_sequence but not in the field lists
     for field, value in results.items():
         if field in vals:
             continue
+        # Remove metric-specific prefixes from field names
+        clean_field = field.replace('CLR_', '').replace('VACE_', '')
         if isinstance(value, np.ndarray):
-            vals[field] = float(np.mean(value))
+            vals[clean_field] = float(np.mean(value))
         elif isinstance(value, (int, np.integer)):
-            vals[field] = int(value)
+            vals[clean_field] = int(value)
         elif isinstance(value, (float, np.floating)):
-            vals[field] = float(value)
+            vals[clean_field] = float(value)
         else:
-            vals[field] = value
+            vals[clean_field] = value
 
     return vals
 
@@ -104,21 +153,29 @@ def save_combined_metrics_csv(output_res, metrics_list, output_csv_path, gt_path
     tracker_dataset, tracker_seq, tracker_name = parse_path(tracker_path)
     gt_dataset, gt_seq, _ = parse_path(gt_path)
 
+    # Parse tracker filename to extract additional metadata
+    parsed_model_name, parsed_tracker_name, parsed_sequence, conf_threshold = parse_tracker_filename(tracker_path)
+
     for dataset_name, trackers in output_res.items():
         for tracker_name_eval, sequences in trackers.items():
             for seq_name_eval, metric_results in sequences.items():
                 # Use parsed names when available, otherwise fall back to evaluator labels
+                # Priority: filename parsing > path parsing > evaluator labels
                 row = {
                     'dataset': tracker_dataset or gt_dataset or dataset_name,
-                    'tracker': tracker_name or tracker_name_eval,
-                    'sequence': tracker_seq or gt_seq or seq_name_eval,
+                    'model': parsed_model_name,
+                    'tracker': parsed_tracker_name or tracker_name or tracker_name_eval,
+                    'sequence': parsed_sequence or tracker_seq or gt_seq or seq_name_eval,
                 }
+                # Add confidence threshold if parsed from filename
+                if conf_threshold is not None:
+                    row['conf_threshold'] = conf_threshold
                 for metric_name, metric_obj in metric_objects.items():
                     if metric_name not in metric_results:
                         continue
                     summary = get_metric_summary_values(metric_obj, metric_results[metric_name])
                     for field, value in summary.items():
-                        row[f'{metric_name}_{field}'] = value
+                        row[field] = value
                 rows.append(row)
 
     df = pd.DataFrame(rows)

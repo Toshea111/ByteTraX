@@ -2,6 +2,8 @@
 
 This directory contains a range of deployment architectures integrating **ByteTraX**. These consist of models supported by a custom implementation of the [Ultralytics](https://github.com/ultralytics/ultralytics) package, covering tasks including detection, segmentation, pose-estimation, and prompting.
 
+<div align="center"><img src="../Images/Shark%20Breach%20Segmentation%20Example.gif" width="32%" alt="Shark Breach Segmentation Example"></div>
+
 ## Architectures
 
 - **YOLO** — Standard `detect`, `segment`, `pose`, and `obb`
@@ -21,7 +23,7 @@ pip install -e Deploy/ultralytics
 
 ## Usage
 
-Deploy via Python.
+### Python
 
 ```python
 from ultralytics import YOLO, RTDETR, NAS, YOLOWorld, YOLOE
@@ -40,9 +42,7 @@ model = RTDETR("rtdetr-l.pt")
 results = model.track(source="path/to/video.mp4", tracker="bytetrax.yaml")
 ```
 
-## CLI
-
-Deploy via the Ultralytics CLI.
+### CLI
 
 YOLO example.
 
