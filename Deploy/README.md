@@ -2,7 +2,7 @@
 
 This directory contains a range of deployment architectures integrating **ByteTraX**. These consist of models supported by a custom implementation of the [Ultralytics](https://github.com/ultralytics/ultralytics) package, covering tasks including detection, segmentation, pose-estimation, and prompting.
 
-<div align="center"><img src="../Images/Shark%20Breach%20Segmentation%20Example.gif" width="32%" alt="Shark Breach Segmentation Example"></div>
+<div align="center"><img src="../Images/GMOT-40%20Example%202.gif" width="32%" alt="GMOT-40 Example 2"> <img src="../Images/Shark%20Breach%20Segmentation%20Example.gif" width="32%" alt="Shark Breach Segmentation Example"> <img src="../Images/TeamTrack%20Segmentation%20Example.gif" width="32%" alt="TeamTrack Segmentation Example"></div>
 
 ## Architectures
 
