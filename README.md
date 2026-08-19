@@ -47,3 +47,19 @@ Run the tutorial script for a full working example.
 ```bash
 python Tutorials/YOLO.py
 ```
+
+## Deploy
+
+Rapidly deploy ByteTraX with a range of model architectures across detection, segmentation, and pose-estimation tasks, and export in a variety of formats for edge inference. See [Deploy](Deploy) for currently supported models, tasks, and formats, along with training instructions via the Ultralytics platform.
+
+## Evaluate
+
+Evaluate ByteTraX on your own models and benchmarks using the [Track](#Track) and [Evaluate](#Evaluate) scripts in [Datasets](Datasets).
+
+## Pretrained Models
+
+Pretrained YOLO26n model weights for the benchmarks used in testing can be downloaded from [Models](Models).
+
+## Acknowledgements
+
+ByteTraX is built upon the [ByteTrack](https://github.com/ifzhang/ByteTrack) architecture, and utilises the [Ultralytics](https://github.com/ultralytics/ultralytics) framework for object detection.

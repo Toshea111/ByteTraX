@@ -52,7 +52,7 @@ python Evaluate.py --GT_PATH <path/to/gt.txt> --TRACKER_PATH <path/to/tracker_ou
 
 - `--GT_PATH`: Path to ground truth data file.
 - `--TRACKER_PATH`: Path to tracker results file.
-- `--METRICS`: Metrics to compute (Defualt HOTA, CLEAR, Identity, VACE).
+- `--METRICS`: Metrics to compute (Default HOTA, CLEAR, Identity, VACE, Crossing).
 - `--THRESHOLD`: Ground truth IoU threshold for evaluation (Default 0.5).
 
 ### Output
@@ -77,15 +77,15 @@ python Track.py --video "Tutorials/Videos/SportsMOT.mp4" --model "Models/YOLO/Sp
 
 ### Evaluate Results
 
-Use `Evaluate.py` to evaluate the results by specifying the ground truth and tracker results file locations. Run variables and sequence lengths will be extracted automatically from the file paths.
+Use `Evaluate.py` to evaluate the results by specifying the ground truth and tracker results file locations. Run variables, sequence lengths and video dimensions will be extracted automatically from the file paths.
 
 ```bash
-python Evaluate.py --GT_PATH "Data/SportsMOTGT.txt" --TRACKER_PATH "Results/Tracker_SportsMOTModel_bytetrax_SportsMOT_conf0.25.txt"
+python Evaluate.py --GT_PATH "Data/SportsMOTGT.txt" --TRACKER_PATH "Results/Tracker_SportsMOTModel_bytetrax_SportsMOT_1280x720_conf0.25.txt"
 ```
 
-## Modifications
+## Contribute
 
-In practice, it may be useful to modify `Track.py` and `Evaluate.py` to automatically cycle through models, trackers, and confidence thresholds as required by your testing regime. While these scripts currently require manual path specification, they are readily adaptable to such enhancements.
+In practice, it may be useful to modify `Track.py` and `Evaluate.py` to automatically cycle through models, trackers, and confidence thresholds as required by your testing regime. While these scripts currently require manual path specification, they are readily adaptable to such enhancements. Contributions to improve this functionality are welcomed.
 
 ## Acknowledgements
 

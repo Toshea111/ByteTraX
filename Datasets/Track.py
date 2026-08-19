@@ -153,8 +153,13 @@ def main():
 
     if args.video:
         # Single video mode
+        cap = cv2.VideoCapture(args.video)
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        cap.release()
+
         video_name = Path(args.video).stem
-        output_filename = args.name or f"Tracker_{model_name}_{tracker_name}_{video_name}_conf{args.conf:.2f}.txt"
+        output_filename = args.name or f"Tracker_{model_name}_{tracker_name}_{video_name}_{width}x{height}_conf{args.conf:.2f}.txt"
         output_path = os.path.join(args.output, output_filename)
         print(f"\nProcessing single video with tracker: {tracker_name}, conf={args.conf}")
         process_video(model, args.video, args.tracker, args.conf, output_path)
@@ -168,8 +173,13 @@ def main():
                 continue
 
             # Use actual video filename as sequence
+            cap = cv2.VideoCapture(video_path)
+            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            cap.release()
+
             video_name = Path(video_path).stem
-            output_filename = args.name or f"Tracker_{model_name}_{tracker_name}_{video_name}_conf{args.conf:.2f}.txt"
+            output_filename = args.name or f"Tracker_{model_name}_{tracker_name}_{video_name}_{width}x{height}_conf{args.conf:.2f}.txt"
             output_path = os.path.join(args.output, output_filename)
 
             print(f"\nProcessing {video_name}...")
