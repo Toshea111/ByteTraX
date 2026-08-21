@@ -1,6 +1,6 @@
 # Datasets
 
-This directory contains scripts for saving tracking results in MOTChallenge format, and evaluating them via the [TrackEval Lite](https://github.com/30-A/trackeval_lite) framework. This enables the generation of standard MOT metrics concordant with [TrackEval](https://github.com/JonathonLuiten/TrackEval), but without the need for specific directory structures or sequence information files. It can be used to evaluate **ByteTraX** and other tracking algorithms on a range of benchmarks.
+This directory contains scripts for saving tracking results in MOTChallenge format, and evaluating them via the [TrackEval Lite](https://github.com/30-A/trackeval_lite) framework. This enables the generation of standard MOT metrics concordant with [TrackEval](https://github.com/JonathonLuiten/TrackEval), but without the need for specific directory structures or sequence information files. In addition, the pipeline integrates line crossing accuracy metrics via the 'Crossing' module for rapid high-level evaluation. It can be used to evaluate **ByteTraX** and other tracking algorithms on a range of benchmarks.
 
 ## Track
 

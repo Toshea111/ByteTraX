@@ -40,6 +40,10 @@ results = model.track(source="path/to/video.mp4", tracker="bytetrax.yaml")
 yolo track model=yolo26n.pt source="path/to/video.mp4" tracker="bytetrax.yaml"
 ```
 
+## Configuration
+
+ByteTraX features a track reconnection and merging functionality that can be activated for improved performance in closed systems—those with fixed track counts. This can be toggled along with additional parameters via the [bytetrax.yaml](Deploy/ultralytics/cfg/trackers/bytetrax.yaml) configuration file.
+
 ## Demo
 
 Run the tutorial script for a full working example.
@@ -50,7 +54,7 @@ python Tutorials/YOLO.py
 
 ## Deploy
 
-Rapidly deploy ByteTraX with a range of model architectures across detection, segmentation, and pose-estimation tasks, and export in a variety of formats for edge inference. See [Deploy](Deploy) for currently supported models, tasks, and formats, along with training instructions via the Ultralytics platform.
+Rapidly deploy ByteTraX with a range of model architectures across [detection](Deploy#yolo-detection), [segmentation](Deploy#yolo-segmentation), and [pose-estimation](Deploy#yolo-pose-estimation) tasks, and [export](Deploy#export) in a variety of formats for edge inference. See [Deploy](Deploy) for currently supported models, tasks, and formats, along with training instructions via the Ultralytics platform.
 
 ## Evaluate
 
