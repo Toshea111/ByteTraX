@@ -98,4 +98,4 @@ For a full list of supported formats, see the Ultralytics [export mode](https://
 
 ## Contribute
 
-Contributions that integrate additional model frameworks are welcomed.
+Suggestions and contributions for the integration of additional model frameworks are welcomed.

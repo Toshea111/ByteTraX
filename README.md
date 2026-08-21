@@ -64,6 +64,10 @@ Evaluate ByteTraX on your own models and benchmarks using the [Track](#Track) an
 
 Pretrained YOLO26n model weights for the benchmarks used in testing can be downloaded from [Models](Models).
 
+## Contribute
+
+Contributions and suggestions to improve the ByteTraX algorithm or integrate additional model architectures are welcomed.
+
 ## Acknowledgements
 
 ByteTraX is built upon the [ByteTrack](https://github.com/ifzhang/ByteTrack) architecture, and utilises the [Ultralytics](https://github.com/ultralytics/ultralytics) framework for object detection.
