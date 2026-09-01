@@ -42,7 +42,7 @@ yolo track model=yolo26n.pt source="path/to/video.mp4" tracker="bytetrax.yaml"
 
 ## Configuration
 
-ByteTraX features a track reconnection and merging functionality that can be activated for improved performance in closed systems—those with fixed track counts. This can be toggled along with additional parameters via the [bytetrax.yaml](Deploy/ultralytics/cfg/trackers/bytetrax.yaml) configuration file.
+ByteTraX features a track reconnection and merging functionality that may be activated for improved performance in closed systems—those with fixed track counts. This can be toggled along with additional parameters via the [bytetrax.yaml](Deploy/ultralytics/cfg/trackers/bytetrax.yaml) configuration file.
 
 ## Demo
 
