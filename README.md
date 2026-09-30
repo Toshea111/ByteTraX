@@ -71,3 +71,19 @@ Contributions and suggestions to improve the ByteTraX algorithm or integrate add
 ## Acknowledgements
 
 ByteTraX is built upon the [ByteTrack](https://github.com/ifzhang/ByteTrack) architecture, and utilises the [Ultralytics](https://github.com/ultralytics/ultralytics) framework for object detection.
+
+## Citation
+
+If you find ByteTraX useful, please consider citing the publication.
+
+```bibtex
+@article{osheawheller2026bytetraxenhancingbytetrackarchitecture,
+  title={ByteTraX: Enhancing the ByteTrack Architecture with Optimised Thresholding}, 
+  author={Thomas A. O'Shea-Wheller},
+  year={2026},
+  eprint={2609.37801},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2609.37801}, 
+}
+```
