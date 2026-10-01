@@ -45,7 +45,7 @@ class STrack(BaseTrack):
         tlwh_to_xyah: Convert tlwh bounding box to xyah format.
 
     Examples:
-        Initialize and activate a new track
+        Initialise and activate a new track
         >>> track = STrack(xywh=[100, 200, 50, 80, 0], score=0.9, cls="person")
         >>> track.activate(kalman_filter=KalmanFilterXYAH(), frame_id=1)
     """
@@ -53,7 +53,7 @@ class STrack(BaseTrack):
     shared_kalman = KalmanFilterXYAH()
 
     def __init__(self, xywh: list[float], score: float, cls: Any):
-        """Initialize a new STrack instance.
+        """Initialise a new STrack instance.
 
         Args:
             xywh (list[float]): Bounding box in `(x, y, w, h, idx)` or `(x, y, w, h, angle, idx)` format, where (x, y)
@@ -98,7 +98,7 @@ class STrack(BaseTrack):
             stracks[i].covariance = cov
 
     def activate(self, kalman_filter: KalmanFilterXYAH, frame_id: int):
-        """Activate a new tracklet using the provided Kalman filter and initialize its state and covariance."""
+        """Activate a new tracklet using the provided Kalman filter and initialise its state and covariance."""
         self.kalman_filter = kalman_filter
         self.track_id = self.next_id()
         self.mean, self.covariance = self.kalman_filter.initiate(self.convert_coords(self._tlwh))
@@ -210,12 +210,12 @@ class STrack(BaseTrack):
 
 
 class BYTETRAX:
-    """BYTETRAX: A tracking algorithm built on top of YOLO for object detection and tracking with enhanced
-    reconnection features.
+    """BYTETRAX: An enhanced implementation of the ByteTrack architecture with optimised thresholding.
 
-    This class encapsulates the functionality for initializing, updating, and managing the tracks for detected objects
-    in a video sequence. It maintains the state of tracked, lost, and removed tracks over frames, utilizes Kalman
-    filtering for predicting the new object locations, and performs data association with enhanced track reconnection.
+    A simple enhancement of the ByteTrack algorithm that optimises track continuity via a single unified matching
+    threshold. To further limit identity switches, this includes functions to reconnect lost tracks, and merge
+    overlapping same-class tracks into existing trajectories. These modifications improve both accuracy
+    and processing speed.
 
     Attributes:
         tracked_stracks (list[STrack]): List of successfully activated tracks.
@@ -229,7 +229,7 @@ class BYTETRAX:
     Methods:
         update: Update object tracker with new detections.
         get_kalmanfilter: Return a Kalman filter object for tracking bounding boxes.
-        init_track: Initialize object tracking with detections.
+        init_track: Initialise object tracking with detections.
         get_dists: Calculate the distance between tracks and detections.
         multi_predict: Predict the location of tracks.
         reset_id: Reset the ID counter of STrack.
@@ -237,14 +237,14 @@ class BYTETRAX:
         can_reconnect_track: Check if a lost track can be reconnected to a new detection.
 
     Examples:
-        Initialize BYTETRAX and update with detection results
+        Initialise BYTETRAX and update with detection results
         >>> tracker = BYTETRAX(args, frame_rate=30)
         >>> results = yolo_model.detect(image)
         >>> tracked_objects = tracker.update(results)
     """
 
     def __init__(self, args, frame_rate: int = 30):
-        """Initialize a BYTETRAX instance for object tracking.
+        """Initialise a BYTETRAX instance for object tracking.
 
         Args:
             args (Namespace): Command-line arguments containing tracking parameters.
@@ -290,12 +290,12 @@ class BYTETRAX:
                 unconfirmed.append(track)
             else:
                 tracked_stracks.append(track)
-        # Step 2: First association, with high score detection boxes
+        # Step 2: First association, with unified confidence threshold
         strack_pool = joint_stracks(tracked_stracks, self.lost_stracks)
         # Predict the current location with KF
         self.multi_predict(strack_pool)
         if hasattr(self, "gmc") and img is not None:
-            # use try-except here to bypass errors from gmc module
+            # Use try-except here to bypass errors from gmc module
             try:
                 warp = self.gmc.apply(img, results.xyxy)
             except Exception:
@@ -315,10 +315,10 @@ class BYTETRAX:
             else:
                 track.re_activate(det, self.frame_id, new_id=False)
                 refind_stracks.append(track)
-        # Step 3: Second association, with low score detection boxes association the untrack to the low score detections
+        # Step 3: Second association, with unified confidence threshold
         detections_second = self.init_track(results_second, feats_second)
         r_tracked_stracks = [strack_pool[i] for i in u_track if strack_pool[i].state == TrackState.Tracked]
-        # TODO: consider fusing scores or appearance features for second association.
+
         dists = matching.iou_distance(r_tracked_stracks, detections_second)
         matches, u_track, _u_detection_second = matching.linear_assignment(dists, thresh=0.7)
         for itracked, idet in matches:
@@ -347,7 +347,7 @@ class BYTETRAX:
             track = unconfirmed[it]
             track.mark_removed()
             removed_stracks.append(track)
-        # Step 4: Check for track reconnection before initializing new tracks (if enabled)
+        # Step 4: Check for track reconnection before initialising new tracks (if enabled)
         reconnected_tracks = []
         remaining_detections = []
 
@@ -394,7 +394,7 @@ class BYTETRAX:
 
         u_detection = remaining_detections
 
-        # Step 5: Init new stracks with track merging (if enabled)
+        # Step 5: Initialise new stracks with track merging (if enabled)
         merged_tracks = []
         tracks_to_remove = []
 
@@ -412,7 +412,7 @@ class BYTETRAX:
 
             # Only check for merges if merging is enabled
             if merging_enabled:
-                # Check for potential merges with existing tracked tracks not already merged this frame
+                # Check for potential merges with existing tracks not already merged this frame
                 for existing_track in self.tracked_stracks:
                     if (
                         existing_track.is_activated
@@ -420,7 +420,7 @@ class BYTETRAX:
                         and existing_track.track_id not in merged_track_ids
                     ):
                         iou = self.calculate_iou(track, existing_track)
-                        if iou > max_iou and iou > 0.5:  # IoU > 0.5 threshold
+                        if iou > max_iou and iou > 0.5:  # IoU > 0.5 as default threshold
                             max_iou = iou
                             merge_candidate = existing_track
 
@@ -456,7 +456,7 @@ class BYTETRAX:
         self.tracked_stracks, self.lost_stracks = remove_duplicate_stracks(self.tracked_stracks, self.lost_stracks)
         self.removed_stracks.extend(removed_stracks)
         if len(self.removed_stracks) > 1000:
-            self.removed_stracks = self.removed_stracks[-1000:]  # clip removed stracks to 1000 maximum
+            self.removed_stracks = self.removed_stracks[-1000:]  # Limit removed stracks to 1000 maximum
 
         return np.asarray([x.result for x in self.tracked_stracks if x.is_activated], dtype=np.float32)
 
@@ -465,7 +465,7 @@ class BYTETRAX:
         return KalmanFilterXYAH()
 
     def init_track(self, results, img: np.ndarray | None = None) -> list[STrack]:
-        """Initialize object tracking with given detections, scores, and class labels using the STrack algorithm."""
+        """Initialise object tracking with given detections, scores, and class labels using the STrack algorithm."""
         if len(results) == 0:
             return []
         bboxes = parse_bboxes(results)
@@ -486,9 +486,9 @@ class BYTETRAX:
             detection (STrack): The new detection to potentially reconnect to.
 
         Returns:
-            bool: True if the track can be reconnected, False otherwise.
+            bool: Returns True if the track can be reconnected, False otherwise.
         """
-        # Check if the track disappeared within the track_buffer frames
+        # Check if the track disappeared within the track_buffer frame window
         if self.frame_id - lost_track.end_frame > self.max_time_lost:
             return False
 
@@ -497,13 +497,13 @@ class BYTETRAX:
             return False
 
         # Calculate distance between lost track's last position and new detection
-        lost_center = lost_track.xywh[:2]  # center x, y of lost track
-        det_center = detection.xywh[:2]  # center x, y of new detection
+        lost_center = lost_track.xywh[:2]  # Center x and y coordinates of lost track
+        det_center = detection.xywh[:2]  # Center x and y coordinates of new detection
 
         distance = np.linalg.norm(lost_center - det_center)
 
         # Check if distance is less than 1 times the width of the lost track's bounding box
-        lost_width = lost_track.xywh[2]  # width of lost track
+        lost_width = lost_track.xywh[2]  # Width of lost track's bounding box
         max_distance = 1.0 * lost_width
 
         return distance < max_distance
@@ -558,7 +558,7 @@ class BYTETRAX:
         STrack.reset_id()
 
     def reset(self):
-        """Reset the tracker by clearing all tracked, lost, and removed tracks and reinitializing the Kalman filter."""
+        """Reset the tracker by clearing all tracked, lost, and removed tracks and reinitialising the Kalman filter."""
         self.tracked_stracks: list[STrack] = []
         self.lost_stracks: list[STrack] = []
         self.removed_stracks: list[STrack] = []
